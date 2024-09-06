@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from src.smartfitv1.infrastructure.config import DatabaseConfig
 from src.smartfitv1.infrastructure.data_access.models.base import BaseDb
 from src.smartfitv1.infrastructure.data_access.models.user import UserDb
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config

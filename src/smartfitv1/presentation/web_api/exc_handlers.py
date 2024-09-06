@@ -12,9 +12,7 @@ class WebApiError(Exception):
         super().__init__()
 
         if message is None:
-            assert hasattr(
-                self, "message"
-            )
+            assert hasattr(self, "message")
 
         else:
             self.message = message

@@ -1,9 +1,12 @@
 from typing import AsyncIterable
-from fastapi_users import models
-from fastapi_users.db import BaseUserDatabase
-from fastapi_users.password import PasswordHelperProtocol
+
 from dishka import Provider, Scope, provide
-from fastapi_users.db import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
+from fastapi_users.authentication import (
+    AuthenticationBackend,
+    CookieTransport,
+    JWTStrategy,
+)
+from fastapi_users.db import SQLAlchemyUserDatabase
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -11,18 +14,13 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
-from typing import Optional
-from fastapi_users.authentication import JWTStrategy, CookieTransport, AuthenticationBackend
-from dishka.integrations.fastapi import inject, FromDishka
-
-from fastapi import Depends, Request
-from fastapi_users import BaseUserManager, IntegerIDMixin
-
-from src.smartfitv1.infrastructure.config import SecretManagerConfig
-from src.smartfitv1.infrastructure.data_access.models.user import UserDb
 from src.smartfitv1.infrastructure.auth.manager import UserManager
-
-from src.smartfitv1.infrastructure.config import DatabaseConfig, SecretJwtConfig, SecretManagerConfig
+from src.smartfitv1.infrastructure.config import (
+    DatabaseConfig,
+    SecretJwtConfig,
+    SecretManagerConfig,
+)
+from src.smartfitv1.infrastructure.data_access.models.user import UserDb
 
 
 class SqlalchemyProvider(Provider):
@@ -37,27 +35,28 @@ class SqlalchemyProvider(Provider):
         return create_async_engine(
             config.db_uri,
             pool_size=10,
-            max_overflow = 0,
-            pool_pre_ping = True,
-            connect_args = {
+            max_overflow=0,
+            pool_pre_ping=True,
+            connect_args={
                 "timeout": 15,
                 "command_timeout": 5,
                 "server_settings": {
                     "jit": "off",
                     "application_name": "web-api",
-                }
-            }
+                },
+            },
         )
 
     @provide(scope=Scope.APP)
     def provide_sessionmaker(
-            self, engine: AsyncEngine,
+        self,
+        engine: AsyncEngine,
     ) -> async_sessionmaker[AsyncSession]:
         return async_sessionmaker(bind=engine, expire_on_commit=False)
 
     @provide(scope=Scope.REQUEST, provides=AsyncSession)
     async def provide_session(
-            self, sessionmaker: async_sessionmaker[AsyncSession]
+        self, sessionmaker: async_sessionmaker[AsyncSession]
     ) -> AsyncIterable[AsyncSession]:
         async with sessionmaker() as session:
             yield session
@@ -78,29 +77,28 @@ class FastapiUsersProvider(Provider):
         return JWTStrategy(secret=secret_jwt.secret_jwt, lifetime_seconds=3600)
 
     @provide(scope=Scope.APP)
-    def provide_auth_backend(self,
-                             jwt_strategy: JWTStrategy) -> AuthenticationBackend:
-        cookie_transport = CookieTransport(cookie_name='smartfit', cookie_max_age=3600)
+    def provide_auth_backend(self, jwt_strategy: JWTStrategy) -> AuthenticationBackend:
+        cookie_transport = CookieTransport(cookie_name="smartfit", cookie_max_age=3600)
 
         auth_backend = AuthenticationBackend(
-                    name="jwt",
-                    transport=cookie_transport,
-                    get_strategy=lambda: jwt_strategy,
-                )
+            name="jwt",
+            transport=cookie_transport,
+            get_strategy=lambda: jwt_strategy,
+        )
 
         return auth_backend
 
     @provide(scope=Scope.REQUEST)
-    def provide_user_manager(self, secret_jwt: SecretJwtConfig,
-                             secret_manager: SecretManagerConfig,
-                             session: AsyncSession
-                             ) -> UserManager:
+    def provide_user_manager(
+        self,
+        secret_jwt: SecretJwtConfig,
+        secret_manager: SecretManagerConfig,
+        session: AsyncSession,
+    ) -> UserManager:
         user_db = SQLAlchemyUserDatabase(session, UserDb)
-        user_manager = UserManager(reset_password_token_secret=secret_jwt.secret_jwt,
-                                   verification_token_secret=secret_manager.secret_manager,
-                                   user_db=user_db,
-                                   )
+        user_manager = UserManager(
+            reset_password_token_secret=secret_jwt.secret_jwt,
+            verification_token_secret=secret_manager.secret_manager,
+            user_db=user_db,
+        )
         return user_manager
-
-
-
