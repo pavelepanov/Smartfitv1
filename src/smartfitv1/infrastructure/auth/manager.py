@@ -2,15 +2,12 @@ from typing import Optional
 
 from dishka.integrations.fastapi import FromDishka, inject
 from fastapi_users import BaseUserManager, FastAPIUsers, IntegerIDMixin, models
-from fastapi_users.authentication import (
-    AuthenticationBackend,
-    CookieTransport,
-    JWTStrategy,
-)
+from fastapi_users.authentication import (AuthenticationBackend,
+                                          CookieTransport, JWTStrategy)
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.password import PasswordHelperProtocol
 
-from src.smartfitv1.infrastructure.data_access.models.user import UserDb
+from src.smartfitv1.infrastructure.persistence.models.user import UserDb
 
 
 class UserManager(IntegerIDMixin, BaseUserManager[UserDb, int]):

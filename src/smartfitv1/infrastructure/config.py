@@ -1,7 +1,9 @@
 from dataclasses import dataclass
 from os import getenv
 
-# load_dotenv()
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 @dataclass(frozen=True)
