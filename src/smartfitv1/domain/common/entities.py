@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 from typing import Generic, TypeVar
 
-from src.smartfitv1.domain.common.value_objects import ValueObject
+from src.smartfitv1.domain.common.value_objects import BaseValueObject
 
-DomainEntityId = TypeVar("DomainEntityId", bound=ValueObject)
+DomainEntityId = TypeVar("DomainEntityId", bound=BaseValueObject)
 
 
 @dataclass(frozen=True)

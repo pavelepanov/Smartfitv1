@@ -2,26 +2,26 @@ import re
 from dataclasses import dataclass
 
 from src.smartfitv1.domain.common.exceptions import ValueObjectValidationError
-from src.smartfitv1.domain.common.value_objects import ValueObject
+from src.smartfitv1.domain.common.value_objects import BaseValueObject
 
 
 @dataclass(frozen=True)
-class UserId(ValueObject):
+class UserId(BaseValueObject):
     value: int
 
     def _validate(self) -> None:
-        if not isinstance(self.to_raw(), int):
+        if not isinstance(self.value, int):
             raise ValueObjectValidationError("Id must be an int")
 
 
 @dataclass(frozen=True)
-class UserEmail(ValueObject):
+class UserEmail(BaseValueObject):
     value: str
 
     def _validate(self) -> None:
         pattern = r"^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$"
 
-        if not isinstance(self.to_raw(), str):
+        if not isinstance(self.value, str):
             raise ValueObjectValidationError("Email must be an str")
         if not re.match(pattern, self.value):
             raise ValueObjectValidationError(
@@ -32,11 +32,11 @@ class UserEmail(ValueObject):
 
 
 @dataclass(frozen=True)
-class UserName(ValueObject):
+class UserName(BaseValueObject):
     value: str
 
     def _validate(self) -> None:
-        if not isinstance(self.to_raw(), str):
+        if not isinstance(self.value, str):
             raise ValueObjectValidationError("Name must be an str")
         if len(self.value) < 1:
             raise ValueObjectValidationError("Name must be at least 1 character long.")
@@ -49,22 +49,22 @@ class UserName(ValueObject):
 
 
 @dataclass(frozen=True)
-class UserAge(ValueObject):
+class UserAge(BaseValueObject):
     value: int
 
     def _validate(self) -> None:
-        if not isinstance(self.to_raw(), int):
+        if not isinstance(self.value, int):
             raise ValueObjectValidationError("Age must be an int")
         if self.value <= 0:
             raise ValueObjectValidationError("Age must be over 0")
 
 
 @dataclass(frozen=True)
-class UserHashedPassword(ValueObject):
+class UserHashedPassword(BaseValueObject):
     value: str
 
     def _validate(self) -> None:
-        if not isinstance(self.to_raw(), str):
+        if not isinstance(self.value, str):
             raise ValueObjectValidationError("Hashed password must be a str")
         if len(self.value) > 1024:
             raise ValueObjectValidationError(

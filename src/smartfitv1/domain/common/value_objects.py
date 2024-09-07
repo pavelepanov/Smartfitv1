@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Any, Generic, TypeVar
+from typing import Any, TypeVar
 
 V = TypeVar("V", bound=Any)
 
@@ -12,11 +12,3 @@ class BaseValueObject(ABC):
 
     @abstractmethod
     def _validate(self) -> None: ...
-
-
-@dataclass(frozen=True)
-class ValueObject(BaseValueObject, ABC, Generic[V]):
-    value: V
-
-    def to_raw(self) -> V:
-        return self.value
