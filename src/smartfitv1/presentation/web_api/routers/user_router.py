@@ -2,7 +2,8 @@ from dishka import FromDishka
 from dishka.integrations.fastapi import DishkaRoute
 from fastapi import APIRouter
 
-from src.smartfitv1.application.contracts.users.requests import GetUserByIdRequest
+from src.smartfitv1.application.contracts.users.requests import \
+    GetUserByIdRequest
 from src.smartfitv1.application.contracts.users.responses import UserResponse
 from src.smartfitv1.application.usecases.get_user_by_id import GetUserById
 

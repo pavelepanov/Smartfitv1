@@ -5,9 +5,8 @@ from src.smartfitv1.domain.users.entities import User
 from src.smartfitv1.domain.users.repositories import UserRepository
 from src.smartfitv1.domain.users.value_objects import UserId
 from src.smartfitv1.infrastructure.persistence.models.user import UserDb
-from src.smartfitv1.infrastructure.persistence.repositories.mappers.users import (
-    user_db_model_to_user_sdto,
-)
+from src.smartfitv1.infrastructure.persistence.repositories.mappers.users import \
+    user_db_model_to_user_sdto
 
 
 class SqlalchemyUserRepository(UserRepository):

@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from typing import Generic, TypeVar
 
 from src.smartfitv1.domain.common.value_objects import BaseValueObject
@@ -6,7 +5,6 @@ from src.smartfitv1.domain.common.value_objects import BaseValueObject
 DomainEntityId = TypeVar("DomainEntityId", bound=BaseValueObject)
 
 
-@dataclass(frozen=True)
 class DomainEntity(Generic[DomainEntityId]):
     id: DomainEntityId
 

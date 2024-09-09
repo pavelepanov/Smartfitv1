@@ -3,9 +3,11 @@ from sqlalchemy import Boolean, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from src.smartfitv1.infrastructure.persistence.models.base import BaseDb
-from src.smartfitv1.infrastructure.persistence.models.types.created_at import created_at
+from src.smartfitv1.infrastructure.persistence.models.types.created_at import \
+    created_at
 from src.smartfitv1.infrastructure.persistence.models.types.int_pk import intpk
-from src.smartfitv1.infrastructure.persistence.models.types.updated_at import updated_at
+from src.smartfitv1.infrastructure.persistence.models.types.updated_at import \
+    updated_at
 
 
 class UserDb(SQLAlchemyBaseUserTable[int], BaseDb):

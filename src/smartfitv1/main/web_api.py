@@ -2,11 +2,14 @@ from dishka.integrations.fastapi import FromDishka, setup_dishka
 from fastapi import FastAPI
 
 # from src.smartfitv1.infrastructure.auth.main import auth_backend
-from src.smartfitv1.infrastructure.auth.manager import auth_backend, fastapi_users
+from src.smartfitv1.infrastructure.auth.manager import (auth_backend,
+                                                        fastapi_users)
 from src.smartfitv1.infrastructure.di.main import container_factory
-from src.smartfitv1.presentation.web_api.exc_handlers import init_exception_handlers
+from src.smartfitv1.presentation.web_api.exc_handlers import \
+    init_exception_handlers
 from src.smartfitv1.presentation.web_api.routers.user_router import user_router
-from src.smartfitv1.presentation.web_api.schemas.auth import UserCreate, UserRead
+from src.smartfitv1.presentation.web_api.schemas.auth import (UserCreate,
+                                                              UserRead)
 
 
 def init_di(app: FastAPI) -> None:
