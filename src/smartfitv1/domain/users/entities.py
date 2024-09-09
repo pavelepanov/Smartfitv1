@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from datetime import datetime
 
 from src.smartfitv1.domain.common.entities import DomainEntity
@@ -6,7 +7,9 @@ from src.smartfitv1.domain.users.value_objects import (UserAge, UserEmail,
                                                        UserId, UserName)
 
 
+@dataclass
 class User(DomainEntity[UserId]):
+    id: UserId
     name: UserName
     age: UserAge
     email: UserEmail
