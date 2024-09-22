@@ -1,12 +1,10 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.smartfitv1.domain.users.entities import User
+from src.smartfitv1.domain.users.entities import User, user_factory
 from src.smartfitv1.domain.users.repositories import UserRepository
 from src.smartfitv1.domain.users.value_objects import UserId
 from src.smartfitv1.infrastructure.persistence.models.user import UserDb
-from src.smartfitv1.infrastructure.persistence.repositories.mappers.users import \
-    user_db_model_to_user_sdto
 
 
 class SqlalchemyUserRepository(UserRepository):
@@ -18,4 +16,8 @@ class SqlalchemyUserRepository(UserRepository):
         result = await self.session.execute(query)
         user: UserDb | None = result.scalar()
 
-        return user_db_model_to_user_sdto(user)
+        return user_factory(
+            id=user.id,
+            email=user.email,
+            hashed_password=user.hashed_password,
+        )
