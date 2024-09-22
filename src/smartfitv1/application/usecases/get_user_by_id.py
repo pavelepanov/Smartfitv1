@@ -13,9 +13,6 @@ class GetUserById(Interactor[GetUserByIdRequest, UserResponse]):
     async def __call__(self, request: GetUserByIdRequest) -> UserResponse:
         user = await self.user_repository.get_by_id(user_id=UserId(request.id))
 
-        print("#" * 100)
-        print(user)
-
         return UserResponse(
             id=user.id.value,
             email=user.email.value,
