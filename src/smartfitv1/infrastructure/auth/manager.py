@@ -2,8 +2,11 @@ from typing import Optional
 
 from dishka.integrations.fastapi import FromDishka, inject
 from fastapi_users import BaseUserManager, FastAPIUsers, IntegerIDMixin, models
-from fastapi_users.authentication import (AuthenticationBackend,
-                                          CookieTransport, JWTStrategy)
+from fastapi_users.authentication import (
+    AuthenticationBackend,
+    CookieTransport,
+    JWTStrategy,
+)
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.password import PasswordHelperProtocol
 

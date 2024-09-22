@@ -1,9 +1,11 @@
 from dataclasses import dataclass
 
 from src.smartfitv1.domain.common.entities import DomainEntity
-from src.smartfitv1.domain.users.value_objects import (UserEmail,
-                                                       UserHashedPassword,
-                                                       UserId)
+from src.smartfitv1.domain.users.value_objects import (
+    UserEmail,
+    UserHashedPassword,
+    UserId,
+)
 
 
 @dataclass
