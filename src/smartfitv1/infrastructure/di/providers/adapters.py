@@ -1,30 +1,23 @@
 from typing import AsyncIterable
 
 from dishka import Provider, Scope, provide
-from fastapi_users.authentication import (
-    AuthenticationBackend,
-    CookieTransport,
-    JWTStrategy,
-)
+from fastapi_users.authentication import (AuthenticationBackend,
+                                          CookieTransport, JWTStrategy)
 from fastapi_users.db import SQLAlchemyUserDatabase
-from sqlalchemy.ext.asyncio import (
-    AsyncEngine,
-    AsyncSession,
-    async_sessionmaker,
-    create_async_engine,
-)
+from sqlalchemy.ext.asyncio import (AsyncEngine, AsyncSession,
+                                    async_sessionmaker, create_async_engine)
 
+from src.smartfitv1.domain.profiles.repositories import ProfileRepository
 from src.smartfitv1.domain.users.repositories import UserRepository
 from src.smartfitv1.infrastructure.auth.manager import UserManager
-from src.smartfitv1.infrastructure.config import (
-    DatabaseConfig,
-    SecretJwtConfig,
-    SecretManagerConfig,
-)
+from src.smartfitv1.infrastructure.config import (DatabaseConfig,
+                                                  SecretJwtConfig,
+                                                  SecretManagerConfig)
 from src.smartfitv1.infrastructure.persistence.models.user import UserDb
-from src.smartfitv1.infrastructure.persistence.repositories.users import (
-    SqlalchemyUserRepository,
-)
+from src.smartfitv1.infrastructure.persistence.repositories.profiles import \
+    SqlalchemyProfileRepository
+from src.smartfitv1.infrastructure.persistence.repositories.users import \
+    SqlalchemyUserRepository
 
 
 class SqlalchemyProvider(Provider):
@@ -64,6 +57,18 @@ class SqlalchemyProvider(Provider):
     ) -> AsyncIterable[AsyncSession]:
         async with sessionmaker() as session:
             yield session
+
+    user_repository = provide(
+        SqlalchemyUserRepository,
+        scope=Scope.REQUEST,
+        provides=UserRepository,
+    )
+
+    profile_repository = provide(
+        SqlalchemyProfileRepository,
+        scope=Scope.REQUEST,
+        provides=ProfileRepository,
+    )
 
 
 class FastapiUsersProvider(Provider):
@@ -106,9 +111,3 @@ class FastapiUsersProvider(Provider):
             user_db=user_db,
         )
         return user_manager
-
-    user_repository = provide(
-        SqlalchemyUserRepository,
-        scope=Scope.REQUEST,
-        provides=UserRepository,
-    )

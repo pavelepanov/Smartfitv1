@@ -1,4 +1,5 @@
-from src.smartfitv1.application.contracts.users.requests import GetUserByIdRequest
+from src.smartfitv1.application.contracts.users.requests import \
+    GetUserByIdRequest
 from src.smartfitv1.application.contracts.users.responses import UserResponse
 from src.smartfitv1.application.protocols.interactor import Interactor
 from src.smartfitv1.domain.users.repositories import UserRepository
